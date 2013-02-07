@@ -1,5 +1,7 @@
 package hu.sidus.bluetoothapp;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -9,6 +11,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.os.Handler;
 import android.util.Log;
 
 public class SidusService {
@@ -25,15 +28,17 @@ public class SidusService {
 	private AcceptThread mAcceptThread;
 	private ConnectThread mConnectThread;
 	private ConnectedThread mConnectedThread;
+	private Handler mHandler;
 
 	private static String NAME = "SIDUS";
 	private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-	public SidusService() {
+	public SidusService(Handler handler) {
 		mBluetoothDevice = null;
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		mBluetoothServerSocket = null;
 		mBluetoothSocket = null;
+		mHandler = handler;
 	}
 
 	public synchronized void start() {
@@ -86,10 +91,10 @@ public class SidusService {
 			Log.d(TAG, "connected");
 
 		// Cancel the thread that completed the connection
-		if (mConnectThread != null) {
-			mConnectThread.cancel();
-			mConnectThread = null;
-		}
+//		if (mConnectThread != null) {
+//			mConnectThread.cancel();
+//			mConnectThread = null;
+//		}
 
 		// Cancel any thread currently running a connection
 		if (mConnectedThread != null) {
@@ -189,10 +194,10 @@ public class SidusService {
 
 		/** Will cancel the listening socket, and cause the thread to finish */
 		public void cancel() {
-//			try {
-//				mmServerSocket.close();
-//			} catch (IOException e) {
-//			}
+			 try {
+			 mmServerSocket.close();
+			 } catch (IOException e) {
+			 }
 		}
 	}
 
@@ -226,7 +231,7 @@ public class SidusService {
 				// until it succeeds or throws an exception
 				mmSocket.connect();
 				Log.i(TAG, "CONNECT_OK");
-				
+
 			} catch (IOException connectException) {
 				// Unable to connect; close the socket and get out
 				try {
@@ -244,10 +249,10 @@ public class SidusService {
 
 		/** Will cancel an in-progress connection, and close the socket */
 		public void cancel() {
-//			try {
-//				mmSocket.close();
-//			} catch (IOException e) {
-//			}
+			try {
+				mmSocket.close();
+			} catch (IOException e) {
+			}
 		}
 	}
 
@@ -263,17 +268,17 @@ public class SidusService {
 
 			// Get the input and output streams, using temp objects because
 			// member streams are final
-			
+
 			try {
-				
+
 				tmpIn = socket.getInputStream();
 				tmpOut = socket.getOutputStream();
 				Log.i(TAG, "STREAMS_OK");
-				
+
 			} catch (IOException e) {
-				
+
 				Log.e(TAG, "STREAMS_FAIL " + e.getMessage());
-				
+
 			}
 
 			mmInStream = tmpIn;
@@ -282,40 +287,32 @@ public class SidusService {
 
 		public void run() {
 			byte[] buffer = new byte[1024]; // buffer store for the stream
-			int bytes; // bytes returned from read()
+			byte[] data = new byte[16384];
+//			StringBuilder info = new StringBuilder("RSP: ");
+
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+			int bytes = 0; // bytes returned from read()
 
 			// Keep listening to the InputStream until an exception occurs
 			while (true) {
 				try {
+
 					// Read from the InputStream
 					bytes = mmInStream.read(buffer);
+
+					String logHexString = SidusMain.byte2HexStr(buffer, bytes);
+					Log.i(TAG, logHexString);
 					
 					// Send the obtained bytes to the UI activity
-					// mHandler.obtainMessage(MESSAGE_READ, bytes, -1,
-					// buffer).sendToTarget();
+					mHandler.obtainMessage(SidusMain.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
 					
-//					InputStream is;
-//					byte[] bytes = IOUtils.toByteArray(is);
-					
-//					InputStream is = ...
-//							ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-//
-//							int nRead;
-//							byte[] data = new byte[16384];
-//
-//							while ((nRead = is.read(data, 0, data.length)) != -1) {
-//							  buffer.write(data, 0, nRead);
-//							}
-//
-//							buffer.flush();
-//
-//							return buffer.toByteArray();
-					
-					Log.i(TAG, Integer.toString(bytes));
-					
+
+
 				} catch (IOException e) {
 					break;
 				}
+
 			}
 		}
 

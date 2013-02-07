@@ -1,15 +1,18 @@
 package hu.sidus.bluetoothapp;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.UUID;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
-import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +37,8 @@ public class SidusMain extends Activity {
 
 	public static final int MESSAGE_TOAST = 1;
 	public static final int MESSAGE_DEVICE_NAME = 2;
+	public static final int MESSAGE_READ = 1;
+
 	public static String TOAST;
 
 	private static BluetoothAdapter mBluetoothAdapter;
@@ -47,9 +52,11 @@ public class SidusMain extends Activity {
 	public static String DEVICE_NAME;
 
 	byte[] CMD_GETSWVER = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x6B, 0x6B, 0x45 };
+	byte[] CMD_GETTIMERS = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x61, 0x61, 0x45 };
 
 	private TextView answer;
-	private Button send;
+	private Button cmd_getswver;
+	private Button cmd_gettimers;
 
 	@Override
 	protected void onStart() {
@@ -77,29 +84,39 @@ public class SidusMain extends Activity {
 		}
 
 		answer = (TextView) findViewById(R.id.answer);
-		send = (Button) findViewById(R.id.button_send);
 		
-		mSidusService = new SidusService();
+		cmd_getswver = (Button) findViewById(R.id.button_cmd_getswver);
+		cmd_gettimers = (Button) findViewById(R.id.button_cmd_gettimers);
+
+		mSidusService = new SidusService(mHandler);
 		mSidusService.start();
 
-		send.setOnClickListener(new OnClickListener() {
+		cmd_getswver.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				mSidusService.write(CMD_GETSWVER);
 			}
 		});
+		
+		cmd_gettimers.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mSidusService.write(CMD_GETTIMERS);
+			}
+		});
 
 	}
 
-//	@Override
-//	protected synchronized void onResume() {
-//		super.onResume();
-//		Log.v(TAG, "ONRESUME");
-//		
-//		if (mSidusService != null)
-//			mSidusService.start();
-//	}
+	// @Override
+	// protected synchronized void onResume() {
+	// super.onResume();
+	// Log.v(TAG, "ONRESUME");
+	//
+	// if (mSidusService != null)
+	// mSidusService.start();
+	// }
 
 	@Override
 	protected void onDestroy() {
@@ -145,7 +162,7 @@ public class SidusMain extends Activity {
 		case REQUEST_CONNECT:
 
 			if (resultCode == RESULT_CANCELED) {
-				Toast.makeText(getApplicationContext(), "No device selected", Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), "Shit happens", Toast.LENGTH_LONG).show();
 				break;
 			}
 
@@ -169,6 +186,58 @@ public class SidusMain extends Activity {
 			}
 
 			break;
+		}
+	}
+
+	private final Handler mHandler = new Handler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+
+			switch (msg.what) {
+
+			case MESSAGE_READ:
+
+				byte[] readBuf = (byte[]) msg.obj;
+				int paramInt = msg.arg1;
+
+				String hexString = new String(byte2HexStr(readBuf, paramInt));
+				answer.setText(answer.getText() + hexString + "\n");
+
+				// // Valami itt meg nem mukodik megfeleloen ...
+				// try {
+				//
+				// // hexString = String.format("%02X", new
+				// BigInteger(readMessage.getBytes("US-ASCII")));
+				// // answer.setText(answer.getText() + hexString + "\n");
+				//
+				// } catch (UnsupportedEncodingException e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+				// }
+
+				break;
+
+			}
+		}
+	};
+
+	public static String byte2HexStr(byte[] paramArrayOfByte, int paramInt) {
+
+		StringBuilder localStringBuilder = new StringBuilder("");
+
+		for (int i = 0;; i++) {
+			
+			if (i >= paramInt)
+				return localStringBuilder.toString().toUpperCase().trim();
+			
+			String str = Integer.toHexString(0xFF & paramArrayOfByte[i]);
+			
+			if (str.length() == 1)
+				str = "0" + str;
+			
+			localStringBuilder.append(str);
+			localStringBuilder.append(" ");
 		}
 	}
 }
