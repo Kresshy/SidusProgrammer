@@ -1,6 +1,5 @@
 package hu.sidus.bluetoothapp;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -42,24 +41,30 @@ public class SidusService {
 
 	public synchronized void start() {
 		if (D)
-			Log.d(TAG, "start");
+			Log.d(TAG, "START SERVICE");
 
 		// Cancel any thread attempting to make a connection
 		if (mConnectThread != null) {
 			mConnectThread.cancel();
 			mConnectThread = null;
+			if (D)
+				Log.d(TAG, "CANCEL ConnectThread");
 		}
 
 		// Cancel any thread currently running a connection
 		if (mConnectedThread != null) {
 			mConnectedThread.cancel();
 			mConnectedThread = null;
+			if (D)
+				Log.d(TAG, "CANCEL ConnectedThread");
 		}
 
 		// Start the thread to listen on a BluetoothServerSocket
 		if (mAcceptThread == null) {
 			mAcceptThread = new AcceptThread();
 			mAcceptThread.start();
+			if (D)
+				Log.d(TAG, "START AcceptThread");
 		}
 
 	}
@@ -72,17 +77,23 @@ public class SidusService {
 		if (mConnectThread != null) {
 			mConnectThread.cancel();
 			mConnectThread = null;
+			if (D)
+				Log.d(TAG, "Cancel any thread attempting to make a connection");
 		}
 
 		// Cancel any thread currently running a connection
 		if (mConnectedThread != null) {
 			mConnectedThread.cancel();
 			mConnectedThread = null;
+			if (D)
+				Log.d(TAG, "Cancel any thread currently running a connection");
 		}
 
 		// Start the thread to connect with the given device
 		mConnectThread = new ConnectThread(device);
 		mConnectThread.start();
+		if (D)
+			Log.d(TAG, "START ConnectThread " + device);
 	}
 
 	public synchronized void connected(BluetoothSocket socket) {
@@ -90,15 +101,17 @@ public class SidusService {
 			Log.d(TAG, "connected");
 
 		// Cancel the thread that completed the connection
-//		if (mConnectThread != null) {
-//			mConnectThread.cancel();
-//			mConnectThread = null;
-//		}
+		// if (mConnectThread != null) {
+		// mConnectThread.cancel();
+		// mConnectThread = null;
+		// }
 
 		// Cancel any thread currently running a connection
 		if (mConnectedThread != null) {
 			mConnectedThread.cancel();
 			mConnectedThread = null;
+			if (D)
+				Log.d(TAG, "Cancel any thread currently connected");
 		}
 
 		// Cancel the accept thread because we only want to connect to one
@@ -106,11 +119,15 @@ public class SidusService {
 		if (mAcceptThread != null) {
 			mAcceptThread.cancel();
 			mAcceptThread = null;
+			if (D)
+				Log.d(TAG, "Cancel the accept thread");
 		}
 
 		// Start the thread to manage the connection and perform transmissions
 		mConnectedThread = new ConnectedThread(socket);
 		mConnectedThread.start();
+		if (D)
+			Log.d(TAG, "START ConnectedThread");
 	}
 
 	public synchronized void stop() {
@@ -120,16 +137,22 @@ public class SidusService {
 		if (mConnectThread != null) {
 			mConnectThread.cancel();
 			mConnectThread = null;
+			if (D)
+				Log.d(TAG, "STOP ConnectThread");
 		}
 
 		if (mConnectedThread != null) {
 			mConnectedThread.cancel();
 			mConnectedThread = null;
+			if (D)
+				Log.d(TAG, "STOP ConnectedThread");
 		}
 
 		if (mAcceptThread != null) {
 			mAcceptThread.cancel();
 			mAcceptThread = null;
+			if (D)
+				Log.d(TAG, "STOP AccceptThread");
 		}
 	}
 
@@ -172,7 +195,7 @@ public class SidusService {
 				try {
 					socket = mmServerSocket.accept();
 				} catch (IOException e) {
-					Log.e(TAG, "Accepting connection " + e.getMessage());
+					Log.e(TAG, "AcceptThread: " + e.getMessage());
 					break;
 				}
 				// If a connection was accepted
@@ -193,10 +216,10 @@ public class SidusService {
 
 		/** Will cancel the listening socket, and cause the thread to finish */
 		public void cancel() {
-			 try {
-			 mmServerSocket.close();
-			 } catch (IOException e) {
-			 }
+			try {
+				mmServerSocket.close();
+			} catch (IOException e) {
+			}
 		}
 	}
 
@@ -286,10 +309,10 @@ public class SidusService {
 
 		public void run() {
 			byte[] buffer = new byte[1024]; // buffer store for the stream
-			byte[] data = new byte[16384];
-//			StringBuilder info = new StringBuilder("RSP: ");
+			// byte[] data = new byte[16384];
+			// StringBuilder info = new StringBuilder("RSP: ");
 
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			// ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
 			int bytes = 0; // bytes returned from read()
 
@@ -302,11 +325,9 @@ public class SidusService {
 
 					String logHexString = SidusMain.byte2HexStr(buffer, bytes);
 					Log.i(TAG, logHexString);
-					
+
 					// Send the obtained bytes to the UI activity
 					mHandler.obtainMessage(SidusMain.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
-					
-
 
 				} catch (IOException e) {
 					break;
