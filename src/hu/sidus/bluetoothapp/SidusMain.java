@@ -1,13 +1,5 @@
 package hu.sidus.bluetoothapp;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.util.UUID;
 
 import android.app.Activity;
@@ -53,10 +45,12 @@ public class SidusMain extends Activity {
 
 	byte[] CMD_GETSWVER = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x6B, 0x6B, 0x45 };
 	byte[] CMD_GETTIMERS = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x61, 0x61, 0x45 };
+	byte[] CMD_GETSERVOPOS = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x67, 0x67, 0x45 };
 
 	private TextView answer;
 	private Button cmd_getswver;
 	private Button cmd_gettimers;
+	private Button cmd_getservopos;
 
 	@Override
 	protected void onStart() {
@@ -87,6 +81,7 @@ public class SidusMain extends Activity {
 		
 		cmd_getswver = (Button) findViewById(R.id.button_cmd_getswver);
 		cmd_gettimers = (Button) findViewById(R.id.button_cmd_gettimers);
+		cmd_getservopos = (Button) findViewById(R.id.button_cmd_getservopos);
 
 		mSidusService = new SidusService(mHandler);
 		mSidusService.start();
@@ -104,6 +99,14 @@ public class SidusMain extends Activity {
 			@Override
 			public void onClick(View v) {
 				mSidusService.write(CMD_GETTIMERS);
+			}
+		});
+		
+		cmd_getservopos.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mSidusService.write(CMD_GETSERVOPOS);
 			}
 		});
 

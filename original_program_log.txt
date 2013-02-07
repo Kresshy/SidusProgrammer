@@ -1,0 +1,46 @@
+LOGCAT logs:
+
+02-07 21:28:46.070: I/SidusService(32612): 00
+
+02-07 21:28:46.100: I/SidusService(32612): 00
+
+02-07 21:28:46.130: I/SidusService(32612): 00 00 00 24 68 0F 19 23 2D 37
+
+02-07 21:28:46.130: I/SidusService(32612): 41 4B 55 5F 69 73 0F 19 23
+
+02-07 21:28:46.140: I/SidusService(32612): 2D 37 41 4B 55 5F 69 73 0F 19
+
+02-07 21:28:46.140: I/SidusService(32612): 23 2D 37 41 4B 55 5F 69 73 C9
+
+02-07 21:28:46.170: I/SidusService(32612): 45
+
+
+########################################
+
+THE ORIGINAL BYTES OF THE PROGRAM
+
+PREAMBLE | SYNC | LENGTH | CMD
+
+00 | 00 00 00 00 | 24 | 68 
+
+SERVO1:
+
+0F 19 23 2D 37 41 4B 55 5F 69 73 
+
+SERVO2:
+
+0F 19 23 2D 37 41 4B 55 5F 69 73 
+
+SERVO3:
+
+0F 19 23 2D 37 41 4B 55 5F 69 73
+
+CHK | TERMINATOR
+
+C9 | 45
+
+#########################################
+
+SERVOS IN DECIMAL (all the same):
+
+15 25 35 45 55 65 75 85 95 105 115

@@ -1,6 +1,5 @@
 package hu.sidus.bluetoothapp;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;

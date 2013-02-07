@@ -16,6 +16,13 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/button_cmd_getswver"
         android:text="CMD_GETTIMERS"/>
+    
+    <Button 
+        android:id="@+id/button_cmd_getservopos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/button_cmd_gettimers"
+        android:text="CMD_GETSERVOPOS"/>
 
     <TextView
         android:id="@+id/answer"
