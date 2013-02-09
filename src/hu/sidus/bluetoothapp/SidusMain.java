@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,8 @@ public class SidusMain extends Activity {
 	private Button cmd_getswver;
 	private Button cmd_gettimers;
 	private Button cmd_getservopos;
+	private Button send_cmd;
+	private EditText enter_cmd;
 
 	@Override
 	protected void onStart() {
@@ -79,9 +82,12 @@ public class SidusMain extends Activity {
 
 		answer = (TextView) findViewById(R.id.answer);
 		
+		enter_cmd = (EditText) findViewById(R.id.edittext_enter_command);
+
 		cmd_getswver = (Button) findViewById(R.id.button_cmd_getswver);
 		cmd_gettimers = (Button) findViewById(R.id.button_cmd_gettimers);
 		cmd_getservopos = (Button) findViewById(R.id.button_cmd_getservopos);
+		send_cmd = (Button) findViewById(R.id.button_send_command);
 
 		mSidusService = new SidusService(mHandler);
 		mSidusService.start();
@@ -93,20 +99,30 @@ public class SidusMain extends Activity {
 				mSidusService.write(CMD_GETSWVER);
 			}
 		});
-		
+
 		cmd_gettimers.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				mSidusService.write(CMD_GETTIMERS);
 			}
 		});
-		
+
 		cmd_getservopos.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				mSidusService.write(CMD_GETSERVOPOS);
+			}
+		});
+		
+		send_cmd.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String cmd = enter_cmd.getText().toString();
+				byte[] cmd_byte = hexStr2Bytes(cmd);
+				mSidusService.write(cmd_byte);
 			}
 		});
 
@@ -207,18 +223,6 @@ public class SidusMain extends Activity {
 				String hexString = new String(byte2HexStr(readBuf, paramInt));
 				answer.setText(answer.getText() + hexString + "\n");
 
-				// // Valami itt meg nem mukodik megfeleloen ...
-				// try {
-				//
-				// // hexString = String.format("%02X", new
-				// BigInteger(readMessage.getBytes("US-ASCII")));
-				// // answer.setText(answer.getText() + hexString + "\n");
-				//
-				// } catch (UnsupportedEncodingException e) {
-				// // TODO Auto-generated catch block
-				// e.printStackTrace();
-				// }
-
 				break;
 
 			}
@@ -230,17 +234,34 @@ public class SidusMain extends Activity {
 		StringBuilder localStringBuilder = new StringBuilder("");
 
 		for (int i = 0;; i++) {
-			
+
 			if (i >= paramInt)
 				return localStringBuilder.toString().toUpperCase().trim();
-			
+
 			String str = Integer.toHexString(0xFF & paramArrayOfByte[i]);
-			
+
 			if (str.length() == 1)
 				str = "0" + str;
-			
+
 			localStringBuilder.append(str);
 			localStringBuilder.append(" ");
+		}
+	}
+
+	public static byte[] hexStr2Bytes(String paramString) {
+
+		String str = paramString.trim().replace(" ", "").toUpperCase();
+		int i = str.length() / 2;
+
+		byte[] arrayOfByte = new byte[i];
+
+		for (int j = 0;; j++) {
+			if (j >= i)
+				return arrayOfByte;
+
+			int k = 1 + j * 2;
+			int m = k + 1;
+			arrayOfByte[j] = ((byte) (0xFF & Integer.decode("0x" + str.substring(j * 2, k) + str.substring(k, m)).intValue()));
 		}
 	}
 }

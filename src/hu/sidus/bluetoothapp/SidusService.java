@@ -329,6 +329,15 @@ public class SidusService {
 					// Send the obtained bytes to the UI activity
 					mHandler.obtainMessage(SidusMain.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
 
+					try {
+						
+						Thread.sleep(30);
+						
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 				} catch (IOException e) {
 					break;
 				}

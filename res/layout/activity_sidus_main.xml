@@ -3,33 +3,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SidusMain" >
-    
-    <Button 
+
+    <Button
         android:id="@+id/button_cmd_getswver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="CMD_GETSWVER" />
-    
-    <Button 
+
+    <Button
         android:id="@+id/button_cmd_gettimers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/button_cmd_getswver"
-        android:text="CMD_GETTIMERS"/>
-    
-    <Button 
+        android:text="CMD_GETTIMERS" />
+
+    <Button
         android:id="@+id/button_cmd_getservopos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/button_cmd_gettimers"
-        android:text="CMD_GETSERVOPOS"/>
+        android:text="CMD_GETSERVOPOS" />
 
-    <TextView
-        android:id="@+id/answer"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/edittext_enter_command"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-      	android:layout_below="@id/button_cmd_getswver"
-        android:text="Message: \n" />
+        android:layout_below="@id/button_cmd_getswver" />
+
+    <Button
+        android:id="@+id/button_send_command"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edittext_enter_command"
+        android:text="SEND" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button_send_command" >
+
+        <TextView
+            android:id="@+id/answer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Message: \n" />
+        
+    </ScrollView>
 
 </RelativeLayout>
