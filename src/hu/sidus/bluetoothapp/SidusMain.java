@@ -30,7 +30,7 @@ public class SidusMain extends Activity {
 
 	public static final int MESSAGE_TOAST = 1;
 	public static final int MESSAGE_DEVICE_NAME = 2;
-	public static final int MESSAGE_READ = 1;
+	public static final int MESSAGE_READ = 3;
 
 	public static String TOAST;
 
@@ -54,6 +54,7 @@ public class SidusMain extends Activity {
 	private Button cmd_getservopos;
 	private Button send_cmd;
 	private EditText enter_cmd;
+	private Button connect;
 
 	@Override
 	protected void onStart() {
@@ -81,13 +82,14 @@ public class SidusMain extends Activity {
 		}
 
 		answer = (TextView) findViewById(R.id.answer);
-		
+
 		enter_cmd = (EditText) findViewById(R.id.edittext_enter_command);
 
 		cmd_getswver = (Button) findViewById(R.id.button_cmd_getswver);
 		cmd_gettimers = (Button) findViewById(R.id.button_cmd_gettimers);
 		cmd_getservopos = (Button) findViewById(R.id.button_cmd_getservopos);
 		send_cmd = (Button) findViewById(R.id.button_send_command);
+		connect = (Button) findViewById(R.id.button_connect);
 
 		mSidusService = new SidusService(mHandler);
 		mSidusService.start();
@@ -115,9 +117,9 @@ public class SidusMain extends Activity {
 				mSidusService.write(CMD_GETSERVOPOS);
 			}
 		});
-		
+
 		send_cmd.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				String cmd = enter_cmd.getText().toString();
@@ -126,16 +128,15 @@ public class SidusMain extends Activity {
 			}
 		});
 
-	}
+		connect.setOnClickListener(new OnClickListener() {
 
-	// @Override
-	// protected synchronized void onResume() {
-	// super.onResume();
-	// Log.v(TAG, "ONRESUME");
-	//
-	// if (mSidusService != null)
-	// mSidusService.start();
-	// }
+			@Override
+			public void onClick(View v) {
+				BluetoothDevice device = mBluetoothAdapter.getRemoteDevice("00:12:08:27:25:19");
+				mSidusService.connect(device);
+			}
+		});
+	}
 
 	@Override
 	protected void onDestroy() {
@@ -181,7 +182,7 @@ public class SidusMain extends Activity {
 		case REQUEST_CONNECT:
 
 			if (resultCode == RESULT_CANCELED) {
-				Toast.makeText(getApplicationContext(), "Shit happens", Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), "No device selected", Toast.LENGTH_LONG).show();
 				break;
 			}
 
@@ -214,6 +215,13 @@ public class SidusMain extends Activity {
 		public void handleMessage(Message msg) {
 
 			switch (msg.what) {
+			
+			case MESSAGE_TOAST:
+
+				String message = (String) msg.obj;
+				Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+				
+				break;
 
 			case MESSAGE_READ:
 

@@ -99,7 +99,7 @@ public class SidusService {
 	public synchronized void connected(BluetoothSocket socket) {
 		if (D)
 			Log.d(TAG, "connected");
-
+		mHandler.obtainMessage(SidusMain.MESSAGE_TOAST,-1, -1, "Connected").sendToTarget();
 		// Cancel the thread that completed the connection
 		// if (mConnectThread != null) {
 		// mConnectThread.cancel();

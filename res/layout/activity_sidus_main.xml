@@ -8,22 +8,29 @@
         android:id="@+id/button_cmd_getswver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CMD_GETSWVER" />
+        android:text="SWVER" />
 
     <Button
         android:id="@+id/button_cmd_gettimers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/button_cmd_getswver"
-        android:text="CMD_GETTIMERS" />
+        android:text="TIMERS" />
 
     <Button
         android:id="@+id/button_cmd_getservopos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/button_cmd_gettimers"
-        android:text="CMD_GETSERVOPOS" />
+        android:text="SERVOPOS" />
 
+    <Button
+        android:id="@+id/button_connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/button_cmd_getservopos"
+        android:text="CONNECT" />
+    
     <EditText
         android:id="@+id/edittext_enter_command"
         android:layout_width="fill_parent"
