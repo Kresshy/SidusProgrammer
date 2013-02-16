@@ -1,11 +1,15 @@
 package hu.sidus.bluetoothapp;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -36,6 +40,7 @@ public class SidusMain extends Activity {
 
 	private static BluetoothAdapter mBluetoothAdapter;
 	private static BluetoothDevice mBluetoothDevice;
+	private static byte[] datastream;
 
 	private static final UUID UUID_SECURE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
@@ -55,6 +60,27 @@ public class SidusMain extends Activity {
 	private Button send_cmd;
 	private EditText enter_cmd;
 	private Button connect;
+
+	private BroadcastReceiver bluetoothReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (D) {
+				if (mBluetoothAdapter.getState() == BluetoothAdapter.STATE_TURNING_ON) {
+					Log.v(TAG, "RECEIVED BLUETOOTH STATE CHANGE: STATE_TURNING_ON");
+				}
+
+				if (mBluetoothAdapter.getState() == BluetoothAdapter.STATE_ON) {
+					Log.v(TAG, "RECEIVED BLUETOOTH STATE CHANGE: STATE_ON");
+				}
+			}
+
+			if (mBluetoothAdapter.isEnabled()) {
+				mSidusService = new SidusService(mHandler);
+				mSidusService.start();
+			}
+		}
+	};
 
 	@Override
 	protected void onStart() {
@@ -91,8 +117,28 @@ public class SidusMain extends Activity {
 		send_cmd = (Button) findViewById(R.id.button_send_command);
 		connect = (Button) findViewById(R.id.button_connect);
 
-		mSidusService = new SidusService(mHandler);
-		mSidusService.start();
+		registerReceiver(bluetoothReceiver, new IntentFilter(mBluetoothAdapter.ACTION_STATE_CHANGED));
+
+		if (mBluetoothAdapter.isEnabled()) {
+			mSidusService = new SidusService(mHandler);
+			mSidusService.start();
+		}
+
+		final SidusProgram program = new SidusProgram(10, 3, mSidusService);
+
+//		try {
+//
+//			datastream = program.sendData();
+//			StringBuilder sb = new StringBuilder("STREAM: ");
+//			for (int i = 0; i < datastream.length; i++) {
+//				sb.append(Byte.toString(datastream[i]));
+//			}
+//
+//			Log.i(TAG, sb.toString());
+//		} catch (IOException e) {
+//			Log.e(TAG, "IOEXCEPTION: " + e.getMessage());
+//			e.printStackTrace();
+//		}
 
 		cmd_getswver.setOnClickListener(new OnClickListener() {
 
@@ -122,9 +168,17 @@ public class SidusMain extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				String cmd = enter_cmd.getText().toString();
-				byte[] cmd_byte = hexStr2Bytes(cmd);
-				mSidusService.write(cmd_byte);
+				// String cmd = enter_cmd.getText().toString();
+				// byte[] cmd_byte = hexStr2Bytes(cmd);
+				// mSidusService.write(cmd_byte);
+
+				try {
+					program.sendData();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+//				mSidusService.write(datastream);
 			}
 		});
 
@@ -142,6 +196,7 @@ public class SidusMain extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		mSidusService.stop();
+		unregisterReceiver(bluetoothReceiver);
 	}
 
 	public void setupService() {
@@ -215,12 +270,12 @@ public class SidusMain extends Activity {
 		public void handleMessage(Message msg) {
 
 			switch (msg.what) {
-			
+
 			case MESSAGE_TOAST:
 
 				String message = (String) msg.obj;
 				Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-				
+
 				break;
 
 			case MESSAGE_READ:
