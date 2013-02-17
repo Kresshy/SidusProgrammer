@@ -7,9 +7,9 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="10" />
-    
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:allowBackup="true"
@@ -28,6 +28,10 @@
         <activity
             android:name="hu.sidus.bluetoothapp.SidusConnect"
             android:label="@string/title_activity_sidus_connect" >
+        </activity>
+        <activity
+            android:name="hu.sidus.bluetoothapp.DebugActivity"
+            android:label="@string/title_activity_debug" >
         </activity>
     </application>
 

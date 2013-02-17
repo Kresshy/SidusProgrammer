@@ -117,7 +117,7 @@ public class SidusMain extends Activity {
 		send_cmd = (Button) findViewById(R.id.button_send_command);
 		connect = (Button) findViewById(R.id.button_connect);
 
-		registerReceiver(bluetoothReceiver, new IntentFilter(mBluetoothAdapter.ACTION_STATE_CHANGED));
+		registerReceiver(bluetoothReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
 
 		if (mBluetoothAdapter.isEnabled()) {
 			mSidusService = new SidusService(mHandler);
@@ -126,27 +126,10 @@ public class SidusMain extends Activity {
 
 		final SidusProgram program = new SidusProgram(10, 3, mSidusService);
 
-//		try {
-//
-//			datastream = program.sendData();
-//			StringBuilder sb = new StringBuilder("STREAM: ");
-//			for (int i = 0; i < datastream.length; i++) {
-//				sb.append(Byte.toString(datastream[i]));
-//			}
-//
-//			Log.i(TAG, sb.toString());
-//		} catch (IOException e) {
-//			Log.e(TAG, "IOEXCEPTION: " + e.getMessage());
-//			e.printStackTrace();
-//		}
+		Intent debugActivity = new Intent(getApplicationContext(), DebugActivity.class);
+		startActivity(debugActivity);
 
-		cmd_getswver.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				mSidusService.write(CMD_GETSWVER);
-			}
-		});
+		cmd_getswver.setOnClickListener(mOnClickListener);
 
 		cmd_gettimers.setOnClickListener(new OnClickListener() {
 
@@ -178,7 +161,7 @@ public class SidusMain extends Activity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-//				mSidusService.write(datastream);
+				// mSidusService.write(datastream);
 			}
 		});
 
@@ -288,6 +271,158 @@ public class SidusMain extends Activity {
 
 				break;
 
+			}
+		}
+	};
+
+	private OnClickListener mOnClickListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			switch (v.getId()) {
+			case R.id.button_cmd_getswver:
+				
+//				Toast.makeText(getApplicationContext(), "Working", Toast.LENGTH_LONG).show();
+				
+				mSidusService.write(CMD_GETSWVER);
+				
+				break;
+			case R.id.line_one_two:
+
+				break;
+			case R.id.line_one_three:
+
+				break;
+			case R.id.line_one_four:
+
+				break;
+			case R.id.line_one_five:
+
+				break;
+			case R.id.line_two_two:
+
+				break;
+			case R.id.line_two_three:
+
+				break;
+			case R.id.line_two_four:
+
+				break;
+			case R.id.line_two_five:
+
+				break;
+			case R.id.line_three_two:
+
+				break;
+			case R.id.line_three_three:
+
+				break;
+			case R.id.line_three_four:
+
+				break;
+			case R.id.line_three_five:
+
+				break;
+			case R.id.line_four_two:
+
+				break;
+			case R.id.line_four_three:
+
+				break;
+			case R.id.line_four_four:
+
+				break;
+			case R.id.line_four_five:
+
+				break;
+			case R.id.line_five_two:
+
+				break;
+			case R.id.line_five_three:
+
+				break;
+			case R.id.line_five_four:
+
+				break;
+			case R.id.line_five_five:
+
+				break;
+			case R.id.line_six_two:
+
+				break;
+			case R.id.line_six_three:
+
+				break;
+			case R.id.line_six_four:
+
+				break;
+			case R.id.line_six_five:
+
+				break;
+			case R.id.line_seven_two:
+
+				break;
+			case R.id.line_seven_three:
+
+				break;
+			case R.id.line_seven_four:
+
+				break;
+			case R.id.line_seven_five:
+
+				break;
+			case R.id.line_eight_two:
+
+				break;
+			case R.id.line_eight_three:
+
+				break;
+			case R.id.line_eight_four:
+
+				break;
+			case R.id.line_eight_five:
+
+				break;
+			case R.id.line_nine_two:
+
+				break;
+			case R.id.line_nine_three:
+
+				break;
+			case R.id.line_nine_four:
+
+				break;
+			case R.id.line_nine_five:
+
+				break;
+			case R.id.line_ten_two:
+
+				break;
+			case R.id.line_ten_three:
+
+				break;
+			case R.id.line_ten_four:
+
+				break;
+			case R.id.line_ten_five:
+
+				break;
+			case R.id.line_eleven_two:
+
+				break;
+			case R.id.line_eleven_three:
+
+				break;
+			case R.id.line_eleven_four:
+
+				break;
+			case R.id.line_eleven_five:
+
+				break;
+
+			default:
+
+				break;
 			}
 		}
 	};
