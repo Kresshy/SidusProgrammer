@@ -151,16 +151,16 @@ public class SidusMain extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// String cmd = enter_cmd.getText().toString();
-				// byte[] cmd_byte = hexStr2Bytes(cmd);
-				// mSidusService.write(cmd_byte);
+				 String cmd = enter_cmd.getText().toString();
+				 byte[] cmd_byte = hexStr2Bytes(cmd);
+				 mSidusService.write(cmd_byte);
 
-				try {
-					program.sendData();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//				try {
+//					program.sendData();
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 				// mSidusService.write(datastream);
 			}
 		});
