@@ -19,10 +19,10 @@ public class TimerProgram {
 	private int MAX_ELEMENTS;
 
 	// supported categories
-	private final static int F1A = 1;
-	private final static int F1B = 2;
-	private final static int F1C = 3;
-	private final static int F1Q = 4;
+	public final static int F1A = 1;
+	public final static int F1B = 2;
+	public final static int F1C = 3;
+	public final static int F1Q = 4;
 
 	// F1A, F1B, F1C, F1Q
 	private int FAICategory;
