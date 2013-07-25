@@ -20,7 +20,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuInflater;
 
-public class ProgramActivity extends SherlockActivity {
+public class SidusProgramActivity extends SherlockActivity {
 	
 	private final String TAG = "Program_Activity";
 	private LinearLayout rootLinearLayout;
@@ -117,7 +117,7 @@ public class ProgramActivity extends SherlockActivity {
 
 		for (int i = 0; i < tableHeaderLayout.getChildCount(); i++) {
 			TextView tView = (TextView) tableHeaderLayout.getChildAt(i);
-			tView.setTextSize((int) (14 * scale));
+			tView.setTextSize((int) (14));
 
 			switch (i) {
 			case 0:
@@ -180,7 +180,7 @@ public class ProgramActivity extends SherlockActivity {
 			for (int j = 0; j < lLayout.getChildCount(); j++) {
 
 				TextView tView = (TextView) lLayout.getChildAt(j);
-				tView.setTextSize((int) (20 * scale));
+				tView.setTextSize((int) (14 * scale));
 
 				switch (j) {
 				case 0:

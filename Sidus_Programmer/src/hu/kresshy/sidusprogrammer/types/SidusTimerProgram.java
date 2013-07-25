@@ -13,11 +13,12 @@ import java.util.List;
  * 
  */
 
-public class TimerProgram {
+public class SidusTimerProgram {
 
 	// maximum elements in the program
 	private int MAX_ELEMENTS;
-
+	private int SERVO_NUMBER;
+	
 	// supported categories
 	public final static int F1A = 1;
 	public final static int F1B = 2;
@@ -28,20 +29,21 @@ public class TimerProgram {
 	private int FAICategory;
 
 	// this List stores ProgramRows
-	private List<ProgramRow> program;
+	private List<SidusProgramRow> program;
 
-	public TimerProgram(int maxElements, int category) {
+	public SidusTimerProgram(int maxElements, int category, int servoNumber) {
 		this.MAX_ELEMENTS = maxElements;
 		this.FAICategory = category;
-
-		program = new ArrayList<ProgramRow>();
+		this.SERVO_NUMBER = servoNumber;
+		
+		program = new ArrayList<SidusProgramRow>();
 
 		generateProgramRows();
 	}
 
 	private void generateProgramRows() {
 		for (int i = 0; i < MAX_ELEMENTS; i++) {
-			program.add(new ProgramRow());
+			program.add(new SidusProgramRow());
 		}
 	}
 
@@ -61,7 +63,7 @@ public class TimerProgram {
 		this.FAICategory = category;
 	}
 
-	public ProgramRow getProgramRowAt(int index) {
+	public SidusProgramRow getProgramRowAt(int index) {
 		if (program.size() > index) {
 			return program.get(index);
 		}
@@ -100,7 +102,7 @@ public class TimerProgram {
 		sb.append("#\ttime\tservo_1\tservo_2\tservo_3\n");
 		
 		for(int i = 0; i < MAX_ELEMENTS; i++) {
-			ProgramRow pRow = program.get(i);
+			SidusProgramRow pRow = program.get(i);
 			sb.append(pRow.toString());
 		}
 		
@@ -108,6 +110,14 @@ public class TimerProgram {
 		sb.append("copyright 2013 Sidus Programmer for Android\n");
 		
 		return sb.toString();
+	}
+
+	public int getSERVO_NUMBER() {
+		return SERVO_NUMBER;
+	}
+
+	public void setSERVO_NUMBER(int SERVO_NUMBER) {
+		SERVO_NUMBER = SERVO_NUMBER;
 	}
 
 }

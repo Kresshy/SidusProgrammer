@@ -7,7 +7,7 @@ package hu.kresshy.sidusprogrammer.types;
  * The TimerProgram class uses it as an ArrayList<ProgramRow> 
  */
 
-public class ProgramRow {
+public class SidusProgramRow {
 
 	// number of row
 	public int num;
@@ -21,34 +21,34 @@ public class ProgramRow {
 	public byte servo3;
 	
 	// engine value for f1q or f1c?
-	public float engine;
+	public float servo4_esc;
 
 	// constructors for setting the values of this row
-	public ProgramRow() {
+	public SidusProgramRow() {
 		this.num = 0;
 		this.time = 0;
 		this.servo1 = 0;
 		this.servo2 = 0;
 		this.servo3 = 0;
-		this.engine = 0;
+		this.servo4_esc = 0;
 	}
 
-	public ProgramRow(int num, float time, byte servo1, byte servo2, byte servo3) {
+	public SidusProgramRow(int num, float time, byte servo1, byte servo2, byte servo3) {
 		this.num = num;
 		this.time = time;
 		this.servo1 = servo1;
 		this.servo2 = servo2;
 		this.servo3 = servo3;
-		this.engine = 0;
+		this.servo4_esc = 0;
 	}
 
-	public ProgramRow(int num, float time, byte servo1, byte servo2, byte servo3, float engine) {
+	public SidusProgramRow(int num, float time, byte servo1, byte servo2, byte servo3, float engine) {
 		this.num = num;
 		this.time = time;
 		this.servo1 = servo1;
 		this.servo2 = servo2;
 		this.servo3 = servo3;
-		this.engine = engine;
+		this.servo4_esc = engine;
 	}
 	
 	// engine value not returned yet

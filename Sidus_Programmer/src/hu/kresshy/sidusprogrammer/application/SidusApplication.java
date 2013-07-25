@@ -1,12 +1,12 @@
 package hu.kresshy.sidusprogrammer.application;
 
-import hu.kresshy.sidusprogrammer.bluetooth.ConnectionService;
-import hu.kresshy.sidusprogrammer.bluetooth.ConnectionService.State;
+import hu.kresshy.sidusprogrammer.bluetooth.SidusConnectionService;
+import hu.kresshy.sidusprogrammer.bluetooth.SidusConnectionService.State;
 import android.app.Application;
 
 public class SidusApplication extends Application {
 	
-	private ConnectionService mConnectionService = null;
+	private SidusConnectionService mConnectionService = null;
 	private State state = State.disconnected;
 	
 	@Override
@@ -14,11 +14,11 @@ public class SidusApplication extends Application {
 		
 	}
 	
-	public ConnectionService getConnectionService() {
+	public SidusConnectionService getConnectionService() {
 		return mConnectionService;
 	}
 
-	public void setConnectionService(ConnectionService mConnectionService) {
+	public void setConnectionService(SidusConnectionService mConnectionService) {
 		this.mConnectionService = mConnectionService;
 	}
 

@@ -1,8 +1,8 @@
 package hu.kresshy.sidusprogrammer.application;
 
 import hu.kresshy.sidusprogrammer.R;
-import hu.kresshy.sidusprogrammer.bluetooth.ConnectionService;
-import hu.kresshy.sidusprogrammer.bluetooth.ConnectionService.State;
+import hu.kresshy.sidusprogrammer.bluetooth.SidusConnectionService;
+import hu.kresshy.sidusprogrammer.bluetooth.SidusConnectionService.State;
 
 import java.util.Set;
 
@@ -35,7 +35,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 
-public class StartActivity extends SherlockActivity {
+public class SidusStartActivity extends SherlockActivity {
 
 	private final String TAG = "Start_Activity";
 
@@ -136,7 +136,7 @@ public class StartActivity extends SherlockActivity {
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.skip:
-				Intent startProgramActivity = new Intent(getApplicationContext(), ProgramActivity.class);
+				Intent startProgramActivity = new Intent(getApplicationContext(), SidusProgramActivity.class);
 				startActivity(startProgramActivity);
 				break;
 
@@ -158,7 +158,7 @@ public class StartActivity extends SherlockActivity {
 		}
 
 		if (mBluetoothAdapter.isEnabled() && ((SidusApplication) getApplication()).getConnectionService() == null) {
-			((SidusApplication) getApplication()).setConnectionService(new ConnectionService(mHandler));
+			((SidusApplication) getApplication()).setConnectionService(new SidusConnectionService(mHandler));
 			((SidusApplication) getApplication()).getConnectionService().start();
 		}
 	}
@@ -292,7 +292,7 @@ public class StartActivity extends SherlockActivity {
 
 				((SidusApplication) getApplication()).setState((State) msg.obj);
 
-				Intent startProgramActivity = new Intent(getApplicationContext(), ProgramActivity.class);
+				Intent startProgramActivity = new Intent(getApplicationContext(), SidusProgramActivity.class);
 				startActivity(startProgramActivity);
 
 				break;
@@ -316,7 +316,7 @@ public class StartActivity extends SherlockActivity {
 				Toast.makeText(getApplicationContext(), "Bluetooth is enabled", Toast.LENGTH_LONG).show();
 
 				if (mBluetoothAdapter.isEnabled() && ((SidusApplication) getApplication()).getConnectionService() == null) {
-					((SidusApplication) getApplication()).setConnectionService(new ConnectionService(mHandler));
+					((SidusApplication) getApplication()).setConnectionService(new SidusConnectionService(mHandler));
 					((SidusApplication) getApplication()).getConnectionService().start();
 				}
 

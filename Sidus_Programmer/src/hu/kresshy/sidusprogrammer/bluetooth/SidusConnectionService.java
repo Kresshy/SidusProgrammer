@@ -1,6 +1,6 @@
 package hu.kresshy.sidusprogrammer.bluetooth;
 
-import hu.kresshy.sidusprogrammer.application.StartActivity;
+import hu.kresshy.sidusprogrammer.application.SidusStartActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +14,7 @@ import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
 import android.util.Log;
 
-public class ConnectionService {
+public class SidusConnectionService {
 
 	// Debugging
 	private static final String TAG = "ConnectionService";
@@ -42,7 +42,7 @@ public class ConnectionService {
 	private static String NAME = "SIDUS";
 	private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-	public ConnectionService(Handler handler) {
+	public SidusConnectionService(Handler handler) {
 		state = State.disconnected;
 		mBluetoothDevice = null;
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -84,7 +84,7 @@ public class ConnectionService {
 		}
 
 		state = State.disconnected;
-		mHandler.obtainMessage(StartActivity.MESSAGE_STATE, -1, -1, State.disconnected).sendToTarget();
+		mHandler.obtainMessage(SidusStartActivity.MESSAGE_STATE, -1, -1, State.disconnected).sendToTarget();
 	}
 
 	public synchronized void connect(BluetoothDevice device) {
@@ -114,7 +114,7 @@ public class ConnectionService {
 			Log.d(TAG, "START ConnectThread " + device);
 
 		state = State.connecting;
-		mHandler.obtainMessage(StartActivity.MESSAGE_STATE, -1, -1, State.connecting).sendToTarget();
+		mHandler.obtainMessage(SidusStartActivity.MESSAGE_STATE, -1, -1, State.connecting).sendToTarget();
 	}
 
 	public synchronized void connected(BluetoothSocket socket) {
@@ -153,7 +153,7 @@ public class ConnectionService {
 			Log.d(TAG, "START ConnectedThread");
 
 		state = State.connected;
-		mHandler.obtainMessage(StartActivity.MESSAGE_STATE, -1, -1, State.connected).sendToTarget();
+		mHandler.obtainMessage(SidusStartActivity.MESSAGE_STATE, -1, -1, State.connected).sendToTarget();
 	}
 
 	public synchronized void stop() {
@@ -182,7 +182,7 @@ public class ConnectionService {
 		}
 
 		state = State.disconnected;
-		mHandler.obtainMessage(StartActivity.MESSAGE_STATE, -1, -1, State.disconnected).sendToTarget();
+		mHandler.obtainMessage(SidusStartActivity.MESSAGE_STATE, -1, -1, State.disconnected).sendToTarget();
 	}
 
 	public void write(byte[] out) {
@@ -324,7 +324,7 @@ public class ConnectionService {
 
 			// Get the input and output streams, using temp objects because
 			// member streams are final
-			mHandler.obtainMessage(StartActivity.MESSAGE_CONNECTED, -1, -1, state).sendToTarget();
+			mHandler.obtainMessage(SidusStartActivity.MESSAGE_CONNECTED, -1, -1, state).sendToTarget();
 
 			try {
 
@@ -357,7 +357,7 @@ public class ConnectionService {
 					// TODO: MUST IMPLEMENT SENDING RECEIVED MESSAGES TO
 					// APPLICATION
 					// Send the obtained bytes to the UI activity
-					mHandler.obtainMessage(StartActivity.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
+					mHandler.obtainMessage(SidusStartActivity.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
 
 					try {
 
