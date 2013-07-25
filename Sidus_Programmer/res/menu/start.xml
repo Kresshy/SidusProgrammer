@@ -1,18 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <item
-        android:id="@+id/action_settings"
+    <item 
+        android:id="@+id/action_scan"
         android:orderInCategory="100"
-        android:title="settings"/>
+        android:title="Scan..."/>
     
-    <item
-        android:id="@+id/action_send"
-        android:orderInCategory="200"
-        android:title="send"/>
-    
-    <item
-        android:id="@+id/action_load"
-        android:orderInCategory="300"
-        android:title="load"/>
-
 </menu>

@@ -1,231 +1,355 @@
 package hu.kresshy.sidusprogrammer.application;
 
 import hu.kresshy.sidusprogrammer.R;
+import hu.kresshy.sidusprogrammer.bluetooth.ConnectionService;
+import hu.kresshy.sidusprogrammer.bluetooth.ConnectionService.State;
+
+import java.util.Set;
+
+import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 
 public class StartActivity extends SherlockActivity {
 
-	private final String TAG = "StartActivity";
-	private LinearLayout rootLinearLayout;
+	private final String TAG = "Start_Activity";
+
+	// Member fields
+	private ArrayAdapter<String> mPairedDevicesArrayAdapter;
+	private ArrayAdapter<String> mNewDevicesArrayAdapter;
+	private static BluetoothAdapter mBluetoothAdapter;
+	private static BluetoothDevice mBluetoothDevice;
+	private static Set<BluetoothDevice> pairedDevices;
+	public static String mConnectedDeviceName;
+	public static String DEVICE_NAME;
+
+	private static final int REQUEST_ENABLE_BT = 1;
+
+	public static final int MESSAGE_TOAST = 1;
+	public static final int MESSAGE_READ = 2;
+	public static final int MESSAGE_STATE = 3;
+	public static final int MESSAGE_CONNECTED = 4;
+
+	private Button skipButton;
+	private RelativeLayout rootRelativeLayout;
+
+	private BroadcastReceiver bluetoothReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+
+			if (mBluetoothAdapter.getState() == BluetoothAdapter.STATE_TURNING_ON) {
+				Log.v(TAG, "RECEIVED BLUETOOTH STATE CHANGE: STATE_TURNING_ON");
+			}
+
+			if (mBluetoothAdapter.getState() == BluetoothAdapter.STATE_ON) {
+				Log.v(TAG, "RECEIVED BLUETOOTH STATE CHANGE: STATE_ON");
+
+				pairedDevices = mBluetoothAdapter.getBondedDevices();
+
+				// If there are paired devices, add each one to the ArrayAdapter
+				if (pairedDevices.size() > 0) {
+					findViewById(R.id.title_paired_devices).setVisibility(View.VISIBLE);
+					for (BluetoothDevice device : pairedDevices) {
+						mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+					}
+				}
+			}
+		}
+	};
+
+	// The BroadcastReceiver that listens for discovered devices and
+	// changes the title when discovery is finished
+	private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+
+			// When discovery finds a device
+			if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+				// Get the BluetoothDevice object from the Intent
+				BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+				// If it's already paired, skip it, because it's been listed
+				// already
+				if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+					mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+				}
+				// When discovery is finished, change the Activity title
+			} else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+				setSupportProgressBarIndeterminateVisibility(Boolean.FALSE);
+				setTitle("Select Device");
+				if (mNewDevicesArrayAdapter.getCount() == 0) {
+					// String noDevices = "None found";
+					// mNewDevicesArrayAdapter.add(noDevices);
+					Toast.makeText(getApplicationContext(), "No devices found", Toast.LENGTH_SHORT).show();
+				}
+			}
+		}
+	};
+
+	// The on-click listener for all devices in the ListViews
+	private OnItemClickListener mDeviceClickListener = new OnItemClickListener() {
+		public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
+			// Cancel discovery because it's costly and we're about to connect
+			mBluetoothAdapter.cancelDiscovery();
+
+			// Get the device MAC address, which is the last 17 chars in the
+			// View
+			String info = ((TextView) v).getText().toString();
+			String address = info.substring(info.length() - 17);
+
+			mBluetoothDevice = mBluetoothAdapter.getRemoteDevice(address);
+			Log.i(TAG, mBluetoothDevice.getName() + mBluetoothDevice.getAddress());
+
+			((SidusApplication) getApplication()).getConnectionService().connect(mBluetoothDevice);
+		}
+	};
 
 	private OnClickListener onClickListener = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
-			String rowNumber = ((TextView) ((LinearLayout) v.getParent()).getChildAt(0)).getText().toString();
-			int index = 0;
-
 			switch (v.getId()) {
-			case R.id.time:
-				index = 1;
+			case R.id.skip:
+				Intent startProgramActivity = new Intent(getApplicationContext(), ProgramActivity.class);
+				startActivity(startProgramActivity);
 				break;
-			case R.id.servo1:
-				index = 2;
-				break;
-			case R.id.servo2:
-				index = 3;
-				break;
-			case R.id.servo3:
-				index = 4;
-				break;
+
 			default:
 				break;
 			}
 
-			Log.i(TAG, "RowNumber: " + rowNumber + "id: " + index);
-			Toast.makeText(getApplicationContext(), "RowNumber: " + rowNumber + " id: " + index, Toast.LENGTH_LONG).show();
 		}
 	};
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_start);
+	protected void onStart() {
+		super.onStart();
+		Log.v(TAG, "ONSTART");
 
-		// scale dip to pixels
-		final float scale = getApplicationContext().getResources().getDisplayMetrics().density;
-
-		// display properties
-		Display display = getWindowManager().getDefaultDisplay();
-
-		// build the UI from XML elements
-		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-		// get the height and width of the display depending on API_LEVEL
-		int width;
-		int height;
-
-		if (android.os.Build.VERSION.SDK_INT >= 13) {
-			Point dimensions = new Point();
-			display.getSize(dimensions);
-
-			width = dimensions.x;
-			height = dimensions.y;
-		} else {
-			width = display.getWidth();
-			height = display.getHeight();
+		if (!mBluetoothAdapter.isEnabled()) {
+			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
 		}
 
-		Log.i(TAG, "Screen dimensions: " + width + "x" + height + " dpi: " + scale);
-
-		// find the linear layout on the UI
-		rootLinearLayout = (LinearLayout) findViewById(R.id.startactivity_linearlayout);
-		rootLinearLayout.setBackgroundColor(Color.argb((int) 25, 0, 0, 0));
-
-		// send button to upload program to timer
-		Button sendButton = new Button(this);
-		sendButton.setText("Send");
-
-		// send Button layout parameters
-		LinearLayout.LayoutParams sendButtonParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT);
-		sendButtonParams.setMargins(0, (int) (20 * scale), 0, (int) (20 * scale));
-		sendButton.setLayoutParams(sendButtonParams);
-
-		// add send button to the rootLinearLayout
-		rootLinearLayout.addView(sendButton, sendButtonParams);
-
-		// children TextViews layout parameters
-		LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT);
-		textViewParams.setMargins((int) (1 * scale), (int) (1 * scale), (int) (1 * scale), (int) (1 * scale));
-
-		// inflated LinearLayout layout parameters
-		LinearLayout.LayoutParams lLayoutViewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-				LinearLayout.LayoutParams.WRAP_CONTENT);
-		lLayoutViewParams.setMargins((int) (width * 0.015 * scale), (int) (2.5 * scale), 0, (int) (2.5 * scale));
-
-		LinearLayout tableHeaderLayout = (LinearLayout) inflater.inflate(R.layout.program_row, null);
-
-		for (int i = 0; i < tableHeaderLayout.getChildCount(); i++) {
-			TextView tView = (TextView) tableHeaderLayout.getChildAt(i);
-			tView.setTextSize((int) (14 * scale));
-
-			switch (i) {
-			case 0:
-				tView.setWidth((int) ((width * 0.09)));
-				tView.setText("#");
-				tView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-				break;
-			case 1:
-				tView.setWidth((int) ((width * 0.29)));
-				tView.setText("Time");
-				tView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-				break;
-			case 2:
-				tView.setWidth((int) ((width * 0.19)));
-				tView.setText("Servo_1");
-				tView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-				break;
-			case 3:
-				tView.setWidth((int) ((width * 0.19)));
-				tView.setText("Servo_2");
-				tView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-				break;
-			case 4:
-				tView.setWidth((int) ((width * 0.19)));
-				tView.setText("Servo_3");
-				tView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-				break;
-			default:
-				break;
-			}
-
-			tView.setPadding((int) (5 * scale), (int) (1 * scale), (int) (5 * scale), (int) (1 * scale));
-			tView.setLayoutParams(textViewParams);
-			tView.setBackgroundColor(Color.argb(255, 179, 213, 230));
+		if (mBluetoothAdapter.isEnabled() && ((SidusApplication) getApplication()).getConnectionService() == null) {
+			((SidusApplication) getApplication()).setConnectionService(new ConnectionService(mHandler));
+			((SidusApplication) getApplication()).getConnectionService().start();
 		}
-
-		rootLinearLayout.addView(tableHeaderLayout, lLayoutViewParams);
-
-		// scrollview for the UI elements
-		ScrollView scrollView = new ScrollView(getApplicationContext());
-		rootLinearLayout.addView(scrollView);
-
-		// inner scrollable container linear layout
-		LinearLayout linearLayout = new LinearLayout(getApplicationContext());
-		// linearLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-		linearLayout.setOrientation(LinearLayout.VERTICAL);
-		linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-		scrollView.addView(linearLayout);
-
-		for (int i = 0; i < 10; i++) {
-
-			// inflate the linear layout
-			LinearLayout lLayout = (LinearLayout) inflater.inflate(R.layout.program_row, null);
-
-			// set the row number
-			TextView view = (TextView) lLayout.getChildAt(0);
-			view.setText("" + i);
-
-			// set the children views parameters
-			for (int j = 0; j < lLayout.getChildCount(); j++) {
-
-				TextView tView = (TextView) lLayout.getChildAt(j);
-				tView.setTextSize((int) (20 * scale));
-
-				switch (j) {
-				case 0:
-					tView.setWidth((int) ((width * 0.09)));
-					tView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
-					break;
-				case 1:
-					tView.setWidth((int) ((width * 0.29)));
-					tView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-					break;
-				case 2:
-					tView.setWidth((int) ((width * 0.19)));
-					tView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-					break;
-				case 3:
-					tView.setWidth((int) ((width * 0.19)));
-					tView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-					break;
-				case 4:
-					tView.setWidth((int) ((width * 0.19)));
-					tView.setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-					break;
-				default:
-					break;
-				}
-
-				tView.setPadding((int) (5 * scale), (int) (1 * scale), (int) (5 * scale), (int) (1 * scale));
-				tView.setLayoutParams(textViewParams);
-				tView.setBackgroundColor(Color.argb(25, 0, 0, 0));
-				tView.setOnClickListener(onClickListener);
-			}
-
-			// add the inflated layout to the LinearLayout on the UI
-			linearLayout.addView(lLayout, lLayoutViewParams);
-		}
-
-		// set the UI changes
-		setContentView(rootLinearLayout);
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-		// TODO Auto-generated method stub
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
+		setContentView(R.layout.activity_start);
+		Log.v(TAG, "ONCREATE");
+
+		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+		// If the adapter is null, then Bluetooth is not supported
+		if (mBluetoothAdapter == null) {
+			Toast.makeText(this, "Bluetooth is not supported", Toast.LENGTH_LONG).show();
+			finish();
+			return;
+		}
+
+		registerReceiver(bluetoothReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+
+		setSupportProgressBarIndeterminateVisibility(Boolean.FALSE);
+		
+		rootRelativeLayout = (RelativeLayout) findViewById(R.id.startactivity_relativelayout);
+		rootRelativeLayout.setBackgroundColor(Color.argb((int) 25, 0, 0, 0));
+
+		mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
+		mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
+
+		// Find and set up the ListView for paired devices
+		ListView pairedListView = (ListView) findViewById(R.id.paired_devices);
+		pairedListView.setAdapter(mPairedDevicesArrayAdapter);
+		pairedListView.setOnItemClickListener(mDeviceClickListener);
+		pairedListView.setCacheColorHint(Color.TRANSPARENT);
+		pairedListView.requestFocus(0);
+
+		// Find and set up the ListView for newly discovered devices
+		ListView newDevicesListView = (ListView) findViewById(R.id.new_devices);
+		newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
+		newDevicesListView.setOnItemClickListener(mDeviceClickListener);
+		newDevicesListView.setCacheColorHint(Color.TRANSPARENT);
+		newDevicesListView.requestFocus(0);
+
+		// Register for broadcasts when a device is discovered
+		IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+		this.registerReceiver(mReceiver, filter);
+
+		// Register for broadcasts when discovery has finished
+		filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+		this.registerReceiver(mReceiver, filter);
+
+		if (mBluetoothAdapter.isEnabled()) {
+			pairedDevices = mBluetoothAdapter.getBondedDevices();
+
+			// If there are paired devices, add each one to the ArrayAdapter
+			if (pairedDevices.size() > 0) {
+				findViewById(R.id.title_paired_devices).setVisibility(View.VISIBLE);
+				for (BluetoothDevice device : pairedDevices) {
+					mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+				}
+			}
+		}
+
+		skipButton = (Button) findViewById(R.id.skip);
+		skipButton.setOnClickListener(onClickListener);
+
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		if (((SidusApplication) getApplication()).getConnectionService() != null) {
+			((SidusApplication) getApplication()).getConnectionService().stop();
+		}
+
+		// Make sure we're not doing discovery anymore
+		if (mBluetoothAdapter != null) {
+			mBluetoothAdapter.cancelDiscovery();
+		}
+
+		// Unregister broadcast listeners
+		this.unregisterReceiver(mReceiver);
+		unregisterReceiver(bluetoothReceiver);
+
+	}
+
+	@SuppressLint("HandlerLeak")
+	private final Handler mHandler = new Handler() {
+
+		@Override
+		public void handleMessage(Message msg) {
+
+			switch (msg.what) {
+
+			case MESSAGE_TOAST:
+
+				String message = (String) msg.obj;
+				Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
+				break;
+
+			case MESSAGE_READ:
+
+				// byte[] readBuf = (byte[]) msg.obj;
+				// int paramInt = msg.arg1;
+
+				// Toast.makeText(getApplicationContext(), "message",
+				// Toast.LENGTH_SHORT).show();
+
+				break;
+
+			case MESSAGE_STATE:
+
+				((SidusApplication) getApplication()).setState((State) msg.obj);
+
+				break;
+
+			case MESSAGE_CONNECTED:
+
+				Toast.makeText(getApplicationContext(), "Connected to timer", Toast.LENGTH_LONG).show();
+
+				((SidusApplication) getApplication()).setState((State) msg.obj);
+
+				Intent startProgramActivity = new Intent(getApplicationContext(), ProgramActivity.class);
+				startActivity(startProgramActivity);
+
+				break;
+			}
+		}
+	};
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		switch (requestCode) {
+
+		case REQUEST_ENABLE_BT:
+
+			if (resultCode == RESULT_CANCELED) {
+				Toast.makeText(getApplicationContext(), "Cannot enable Bluetooth", Toast.LENGTH_LONG).show();
+				break;
+			}
+
+			if (resultCode == RESULT_OK) {
+				Toast.makeText(getApplicationContext(), "Bluetooth is enabled", Toast.LENGTH_LONG).show();
+
+				if (mBluetoothAdapter.isEnabled() && ((SidusApplication) getApplication()).getConnectionService() == null) {
+					((SidusApplication) getApplication()).setConnectionService(new ConnectionService(mHandler));
+					((SidusApplication) getApplication()).getConnectionService().start();
+				}
+
+				break;
+			}
+
+			break;
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
 		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.start, menu);
 
 		return true;
 	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+		case R.id.action_scan:
+			mBluetoothAdapter.startDiscovery();
+			setSupportProgressBarIndeterminateVisibility(Boolean.TRUE);
+			break;
+
+		default:
+			break;
+		}
+
+		return true;
+	}
+
 }
