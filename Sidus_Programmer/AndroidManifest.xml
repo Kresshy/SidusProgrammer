@@ -7,9 +7,12 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="hu.kresshy.sidusprogrammer.application.SidusApplication"
@@ -17,7 +20,6 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.Sherlock.Light.DarkActionBar" >
-        
         <activity
             android:name="hu.kresshy.sidusprogrammer.application.SidusStartActivity"
             android:label="@string/app_name" >
@@ -27,13 +29,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <activity 
+        <activity
             android:name="hu.kresshy.sidusprogrammer.application.SidusProgramActivity"
             android:label="@string/app_name" >
-            
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="file" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.sid" />
+                <data android:pathPattern=".*\\..*\\.sid" />
+                <data android:pathPattern=".*\\..*\\..*\\.sid" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.sid" />
+                <data android:host="*" />
+            </intent-filter>
         </activity>
-        
     </application>
 
 </manifest>

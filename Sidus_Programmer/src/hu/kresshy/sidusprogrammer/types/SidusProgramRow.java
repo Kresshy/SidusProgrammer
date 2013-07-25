@@ -21,7 +21,7 @@ public class SidusProgramRow {
 	public byte servo3;
 	
 	// engine value for f1q or f1c?
-	public float servo4_esc;
+	public byte servo4_esc;
 
 	// constructors for setting the values of this row
 	public SidusProgramRow() {
@@ -42,18 +42,18 @@ public class SidusProgramRow {
 		this.servo4_esc = 0;
 	}
 
-	public SidusProgramRow(int num, float time, byte servo1, byte servo2, byte servo3, float engine) {
+	public SidusProgramRow(int num, float time, byte servo1, byte servo2, byte servo3, float servo4_esc) {
 		this.num = num;
 		this.time = time;
 		this.servo1 = servo1;
 		this.servo2 = servo2;
 		this.servo3 = servo3;
-		this.servo4_esc = engine;
+		this.servo4_esc = servo4_esc;
 	}
 	
 	// engine value not returned yet
 	@Override
 	public String toString() {
-		return num + "\t" + time + "\t" + servo1 + "\t" + servo2 + "\t" + servo3;
+		return num + "\t" + time + "\t" + servo1 + "\t" + servo2 + "\t" + servo3 +"\t" + servo4_esc;
 	}
 }
