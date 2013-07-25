@@ -42,7 +42,7 @@ public class SidusProgramRow {
 		this.servo4_esc = 0;
 	}
 
-	public SidusProgramRow(int num, float time, byte servo1, byte servo2, byte servo3, float servo4_esc) {
+	public SidusProgramRow(int num, float time, byte servo1, byte servo2, byte servo3, byte servo4_esc) {
 		this.num = num;
 		this.time = time;
 		this.servo1 = servo1;
