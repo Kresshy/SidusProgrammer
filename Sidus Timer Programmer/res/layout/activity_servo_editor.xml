@@ -1,0 +1,62 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context=".ServoEditor" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
+        android:text="@string/select_value" />
+
+    <!-- <EditText -->
+    <!-- android:id="@+id/servoValue" -->
+    <!-- android:layout_width="250dp" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:hint="@string/default_servo_position" -->
+    <!-- android:inputType="number" /> -->
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+
+        <hu.sch.kresshy.wheel.WheelView
+            android:id="@+id/servo_wheel"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content" />
+        
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/servo_value"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:textSize="25dp" />
+
+    <RelativeLayout
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="10dp" >
+
+        <Button
+            android:id="@+id/btnservocancel"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/btnservonok"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/btnservocancel"
+            android:text="@string/set" />
+    </RelativeLayout>
+
+</LinearLayout>

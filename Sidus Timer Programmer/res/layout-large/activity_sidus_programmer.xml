@@ -1,0 +1,1157 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sidus_large"
+    android:orientation="vertical" >
+
+    <!-- buttons for the different functions -->
+    
+    <TextView android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="2dp"
+		android:textSize="23dp"
+		android:textColor="#AA000000"
+		android:textStyle="bold|italic"
+        android:text="SIDUS Timer Programmer"/>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="2dp"
+        android:layout_marginTop="40dp" >
+
+        <!-- send -->
+
+        <Button
+            android:id="@+id/Send"
+            android:layout_width="260dp"
+            android:layout_height="60dp"
+            android:text="@string/send"
+            android:textColor="#FF0000"
+            android:textStyle="bold" />
+
+        <!-- receive -->
+
+        <Button
+            android:id="@+id/Receive"
+            android:layout_width="260dp"
+            android:layout_height="60dp"
+            android:layout_toRightOf="@id/Send"
+            android:text="@string/receive"
+            android:textColor="#55AA00"
+            android:textStyle="bold" />
+        
+        <ImageButton
+            android:id="@+id/Settings"
+            android:layout_width="80dp"
+            android:layout_height="60dp"
+            android:layout_toRightOf="@id/Receive"
+            android:src="@android:drawable/ic_menu_preferences" />
+        
+    </RelativeLayout>
+
+    <!-- the table for time values -->
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:gravity="center"
+        android:layout_marginTop="30dp" >
+
+        <!-- first row of the table (TITLE BAR) -->
+
+        <TableRow
+            android:gravity="center_horizontal" >
+
+            <!-- five coloumn in the row (FIRST IS TITLE BAR) -->
+
+            <LinearLayout
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:orientation="horizontal"
+                android:background="#22000000"
+                android:padding="2dp" >
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="160dp"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:orientation="horizontal"
+                android:background="#22000000"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/time"
+                    android:textColor="#FFFFFF"
+                    android:textSize="25dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:orientation="horizontal"
+                android:background="#22000000"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/servo1"
+                    android:textColor="#FFFFFF"
+                    android:textSize="25dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:orientation="horizontal"
+                android:background="#22000000"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/servo2"
+                    android:textColor="#FFFFFF"
+                    android:textSize="25dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:orientation="horizontal"
+                android:background="#22000000"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/servo3"
+                    android:textColor="#FFFFFF"
+                    android:textSize="25dp" />
+            </LinearLayout>
+        </TableRow>
+        <!-- second row of the table -->
+
+        <TableRow
+            android:gravity="center_horizontal">
+
+            <!-- five coloumn in the row (FIRST IS TITLE BAR) -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:orientation="horizontal"
+                android:background="#22000000"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textColor="#FFFFFF" 
+                    android:textSize="30dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/firstRowTime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_time_value"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/firstRowServo1pos1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/firstRowServo2pos1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/firstRowServo3pos1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+        </TableRow>
+        <!-- third row of the table -->
+
+        <TableRow
+            android:gravity="center_horizontal">
+
+            <!-- five coloumn in the row (FIRST IS TITLE BAR) -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:orientation="horizontal"
+                android:background="#22000000"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2"
+                    android:textColor="#FFFFFF" 
+                    android:textSize="30dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/secondRowTime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_time_value"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/secondRowServo1Pos2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/secondRowServo2Pos2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/secondRowServo3Pos2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+        </TableRow>
+        <!-- fourth row of the table -->
+
+        <TableRow
+            android:gravity="center_horizontal">
+
+            <!-- five coloumn in the row (FIRST IS TITLE BAR) -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:orientation="horizontal"
+                android:background="#22000000"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3"
+                    android:textColor="#FFFFFF" 
+                    android:textSize="30dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/thirdRowTime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_time_value"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/thirdRowServo1pos3"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/thirdRowServo2pos3"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/thirdRowServo3pos3"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+        </TableRow>
+        <!-- fifth row of the table -->
+
+        <TableRow
+            android:gravity="center_horizontal">
+
+            <!-- five coloumn in the row (FIRST IS TITLE BAR) -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:orientation="horizontal"
+                android:background="#22000000"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4"
+                    android:textColor="#FFFFFF" 
+                    android:textSize="30dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/fourthRowTime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_time_value"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/fourthRowServo1pos4"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/fourthRowServo2pos4"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/fourthRowServo3pos4"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+        </TableRow>
+        <!-- sixth row of the table -->
+
+        <TableRow
+            android:gravity="center_horizontal">
+
+            <!-- five coloumn in the row (FIRST IS TITLE BAR) -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:orientation="horizontal"
+                android:background="#22000000"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="5"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/fifthRowTime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_time_value"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/fifthRowServo1pos5"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/fifthRowServo2pos5"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/fifthRowServo3pos5"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+        </TableRow>
+        <!-- seventh row of the table -->
+
+        <TableRow
+            android:gravity="center_horizontal">
+
+            <!-- five coloumn in the row (FIRST IS TITLE BAR) -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:orientation="horizontal"
+                android:background="#22000000"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="6"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/sixthRowTime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_time_value"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/sixthRowServo1pos6"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/sixthRowServo2pos6"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/sixthRowServo3pos6"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+        </TableRow>
+        <!-- eighth row of the table -->
+
+        <TableRow
+            android:gravity="center_horizontal">
+
+            <!-- five coloumn in the row (FIRST IS TITLE BAR) -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:orientation="horizontal"
+                android:background="#22000000"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="7"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/seventhRowTime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_time_value"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/seventhRowServo1pos7"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/seventhRowServo2pos7"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/seventhRowServo3pos7"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+        </TableRow>
+        <!-- ninth row of the table -->
+
+        <TableRow
+            android:gravity="center_horizontal">
+
+            <!-- five coloumn in the row (FIRST IS TITLE BAR) -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:orientation="horizontal"
+                android:background="#22000000"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="8"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/eighthRowTime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_time_value"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/eighthRowServo1pos8"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/eighthRowServo2pos8"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/eighthRowServo3pos8"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+        </TableRow>
+        <!-- tenth row of the table -->
+
+        <TableRow
+            android:gravity="center_horizontal">
+
+            <!-- five coloumn in the row (FIRST IS TITLE BAR) -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:orientation="horizontal"
+                android:background="#22000000"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="9"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/ninthRowTime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_time_value"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/ninthRowServo1pos9"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/ninthRowServo2pos9"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/ninthRowServo3pos9"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+        </TableRow>
+        <!-- eleventh row of the table -->
+
+        <TableRow
+            android:gravity="center_horizontal">
+
+            <!-- five coloumn in the row (FIRST IS TITLE BAR) -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:orientation="horizontal"
+                android:background="#22000000"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="10"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/tenthRowTime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_time_value"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/tenthRowServo1pos10"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/tenthRowServo2pos10"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/tenthRowServo3pos10"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+        </TableRow>
+
+        <!-- twelveth row of the table (DT) -->
+
+        <TableRow
+            android:gravity="center_horizontal">
+
+            <!-- five coloumn in the row (FIRST IS TITLE BAR) -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:orientation="horizontal"
+                android:background="#22000000"
+                android:padding="2dp" >
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/dt"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/DTTime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_time_value"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/DTServo1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/DTServo2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:layout_margin="1dp"
+                android:background="#FFFFFF"
+                android:orientation="horizontal"
+                android:padding="2dp" >
+
+                <TextView
+                    android:id="@+id/DTServo3"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="@string/default_servo_position"
+                    android:textColor="#000000"
+                    android:textSize="30dp" />
+            </LinearLayout>
+        </TableRow>
+    </TableLayout>
+    
+    <TextView android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:gravity="right|bottom"
+        android:text="F1B"
+        android:textColor="#AA000000"
+        android:textSize="40dp"
+        android:textStyle="bold|italic"
+        android:paddingRight="10dp"/>
+    
+</LinearLayout>

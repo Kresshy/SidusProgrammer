@@ -1,0 +1,35 @@
+<resources>
+
+    <string name="app_name">Sidus Timer Programmer</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_sidus_programmer">Sidus Programmer</string>
+    <string name="Sidus_Label">Sidus Timer Programmer </string>
+    <string name="save">Save</string>
+    <string name="load">Open</string>
+    <string name="send">Send</string>
+    <string name="receive">Receive</string>
+    <string name="default_time_value">000.00</string>
+    <string name="servo1">Servo 1</string>
+    <string name="servo2">Servo 2</string>
+    <string name="servo3">Servo 3</string>
+    <string name="dt">DT</string>
+    <string name="time">Time</string>
+    <string name="default_servo_position">000</string>
+    <string name="title_activity_time_editor">Time Editor</string>
+    <string name="type_value">Please type in the value!</string>
+    <string name="exit">Exit</string>
+    <string name="title_activity_servo_editor">Servo Editor</string>
+    <string name="title_activity_save_dialog">Save Dialog</string>
+    <string name="title_activity_load_dialog">Open Dialog</string>
+    <string name="select_value">Please select a value!</string>
+    <string name="set">Set</string>
+	<string name="cancel">Cancel</string>
+	<string name="default_loc">/sdcard/Android/data/...</string>
+	<string name="save_loc">Save location:</string>
+	<string name="epl_savename">example:nowind_morning</string>
+	<string name="type_filename">Please type in the filename!</string>
+	<string name="choose_program">Please choose a program!</string>
+	<string name="store_loc">Store location:</string>
+    
+</resources>

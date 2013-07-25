@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+<!--     <item android:id="@+id/menu_settings" -->
+<!--         android:title="@string/menu_settings" -->
+<!--         android:orderInCategory="100" /> -->
+    
+    <item android:id="@+id/Save"
+        android:title="@string/save" 
+        android:icon="@android:drawable/ic_menu_save"/>
+    <item android:id="@+id/Load"
+        android:title="@string/load"
+        android:icon="@android:drawable/ic_menu_upload"/>
+    <item android:id="@+id/Exit"
+        android:title="@string/exit"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel" />
+    <item android:id="@+id/PrintProgramValues"
+        android:title="PrintProgramValues" 
+        android:icon="@android:drawable/ic_menu_info_details"/>
+    
+</menu>
